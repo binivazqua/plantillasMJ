@@ -126,14 +126,22 @@ public class Robot extends TimedRobot {
 
     /* 
 
-    // DECLARAR LA NAVX: la navX es una IMU (Inner Mass Unit)
-    AHRS navX = new AHRS(SPI.Port.kMXP);
-    double angle;
+    /* DECLARAR LA NAVX: la navX es una IMU (Inner Mass Unit) que nos devuelve los valores de Yaw, Pitch y Roll del robot. Es decir:
+    Como se mueve en x, y, y tridimensionalmente (de arriba hacia abajo)
+    AHRS navX = new AHRS(SPI.Port.kMXP); --> el argumento es el puerto SPI. Este puerto es el grandote encima de la RoboRIO.
+    
+    // Crear variables para obtener datos de la navX:
+    double angle; --> double es un tipo de dato que adopta decimales o enteros con decimal.
+    double yaw;
+    double pitch;
+
+    */
   
   // LIMIT SWITCHES:
-  DigitalInput limitSwitch = new DigitalInput(6);
+  //DigitalInput limitSwitch = new DigitalInput(6);
   
-  // factor de converisión
+  // DECLARAR FACTORES DE CONVERSIÓN PARA UN BORE ENCODER:
+   
   double diametroLlantaMetros = 0.1524; // --> metros
   
   double relacionBaja = 0.47;
@@ -144,43 +152,56 @@ public class Robot extends TimedRobot {
 
   double CountsPerRev = 2048;
 
-  */
- DifferentialDrive chasis = new DifferentialDrive(null, null);
- CANSparkMax motor = new CANSparkMax(1, MotorType.kBrushless);
- CANSparkMax motor1 = new CANSparkMax(2, MotorType.kBrushless);
+  
+ 
 
-
+  
   
  
   @Override
   public void robotInit() {
     /* 
-      // reset neo
-      neote.restoreFactoryDefaults();
-      neito.restoreFactoryDefaults();
+      // Resetear un motor a sus valores originales:
+      motor.restoreFactoryDefaults();
+    
       
-  
-    izq.setInverted(true);
+      //Invertir un motor:
+      motor.setInverted(true);
+
     // jalar encoder alterno:
 
-    // ASIGNAR BORE ENCODER:
-    //boreEncoder = neote.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192); // <-- depende de las CPR del encoder que andamos usando.
+    // ASIGNAR UN BORE ENCODER A UN MOTOR:
+    //boreEncoder = motor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192); // <-- el último número depende de las CPR del encoder que andamos usando.
     /* CPRs:
      * MagEncoder = 1024
      * BoreEncoder = 8192
      * DATAZO ... el integrado del NEO = 42
      */
-    //FACTOR DE CONVERSIÓN DE BORE ENCODER:
+
+    //FACTOR DE CONVERSIÓN DE BORE ENCODER: para obtener valores en metros.
     //boreEncoder.setPositionConversionFactor(((Math.PI * diametroLlanta) / relacionUsada) / 10);
 
-    //boreEncoder.getPosition(); 
+    //OBTENER DATOS DEL ENCODER:
     /* 
-    boreEncoder.getDistance();
-    neitoEncoder = neito.getEncoder(); // variable para obtener los datos del encoder.
-   */
-    //neoteEncoder = neote.getEncoder();
+      boreEncoder.getPosition(); 
+      boreEncoder.getDistance();
+
     
-    //neoteEncoder.setPositionConversionFactor(0.5);
+    */
+    
+    // OBTENER DATOS DEL ENCODER INTEGRADO DE LOS MOTORES:
+    /* 
+      neoteEncoder = neote.getEncoder();
+
+    */
+
+    // te toca:
+    /*
+     * 1. Invierte un motor y resetealo a sus factory defaults.
+     * 2. Declara un BoreEncoder.
+     * 3. Asigna un factor de conversión dependiendo de su tipo y CPR.
+     * 
+     */
     
 
   }
@@ -188,22 +209,29 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     /* 
-    System.out.println(isArcade);
-    System.out.println("bonsoir");
-    SmartDashboard.putNumber("NavX Yaw", navX.getYaw());
-    SmartDashboard.putNumber("NavX Angle", navX.getAngle());
-    SmartDashboard.putNumber("NavX Pitch", navX.getPitch());
-    SmartDashboard.putNumber("NavX Roll", navX.getRoll());
-    SmartDashboard.putNumber("NavX AccelPitch", navX.getRawAccelX());
+    OJO: recuerda que todo lo que sea "Periodic" se repetirá continuamente dependiendo del periodo del juego en el que nos encontremos.
+    RobotPeriodic() está ejecutándose siempre.
 
-    SmartDashboard.putNumber("Neito Encoder Velocity", neitoEncoder.getVelocity()); // qué quiero específicamente del encoder.
-    SmartDashboard.putNumber("Neito Encoder Position", neitoEncoder.getPosition());
-    SmartDashboard.putBoolean("Neito Positive", neitoPositive);
-    SmartDashboard.putNumber("Neito Speed Positive", neitoSpeedPositive);
-    SmartDashboard.putNumber("Neito Speed Negative", neitoSpeedNegative);
-    SmartDashboard.putNumber("Neote Speed", neoteSpeed);
-    SmartDashboard.putBoolean("Neote Positive", neotePositive);
+    // IMPRIMIR DATOS DE NUESTROS COMPONENTES.
+
+    // imprimir en la consola:
+    System.out.println(variable);
+    
+    // imprimir en el SmartDashboard:
+    SmartDashboar.put(...)("nombre", variable); --> explora todoo lo que pueedes obtener de tus componentes escribiendo un "." y haciendo hover sobre la función.
+
+    Ejemplo:
+    SmartDashboard.putNumber("NavX Angle", navX.getAngle());
+    SmartDashboard.putBoolean("Motor Invertido", motor.isInverted());
+    
     */
+
+    // TE TOCA:
+    /*
+     * 1. Imprime el roll, pitch y yaw de la NavX en el SmartDashboard.
+     * 2. Imprime en la consola si tus motores están invertidos o no.
+     * 3. RETO: escribe en la función @Override adecuada una línea de código que diga tu nombre SOLAMENTE en el Teleoperado (todo el teleoperado).
+     */
   }
 
   @Override
@@ -218,28 +246,31 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-   //neoteEncoder.setPositionConversionFactor(2);
-   /* 
-   boreEncoder.reset();
+     /*
+   // CADA VEZ QUE INICIAMOS EL TELEOPERADO es necesario resetear la posición de nuestros encoders:
+      boreEncoder.reset();
+      motor.setPosition(0);
 
+    // también la navX: ¿Cómo lo harías tú?
+    // Busca una fucnión que lo haga.
+  
+    */
 
    // FACTOR DE CONVERSIÓN DE BORE ENCODER:
-    boreEncoder.setDistancePerPulse((Math.PI * diametroLlantaMetros) / CountsPerRev);
-    neitoEncoder.setPosition(0);
+     boreEncoder.setDistancePerPulse((Math.PI * diametroLlantaMetros) / CountsPerRev);
     
-    //boreEncoder.setPosition(0);
-    //neoteEncoder.setPosition(0);
-    //boreEncoder.setPositionConversionFactor(((Math.PI * diametroLlanta) / relacionUsada) / 10);
-    navX.reset();
+    
+  
 
-    */
+
+    
   }
 
   @Override
   public void teleopPeriodic() {
     
     // NEOS se pueden seguir entre ellos.
-    //neito.follow(neote);
+    //  neito.follow(neote);
     /* 
     if (control_chassis.getRawButton(1)) {
       isArcade = true; // arcade
