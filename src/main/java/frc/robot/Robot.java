@@ -7,6 +7,7 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.MotorCommutation;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /* IMPORTANTE:
@@ -104,45 +106,29 @@ public class Robot extends TimedRobot {
     */
 
     // Follower:
-    CANSparkMax neito = new CANSparkMax(5, MotorType.kBrushless);
-    CANSparkMax neo = new CANSparkMax(6, MotorType.kBrushless);
+    // motor.follow(motorASeguir);
+
     
-    MotorController.add
+    
    // ENCODERS: 
    /*
     * Un encoder es un sensor que nos ayuda a recolectar la información de nuestros motores.
     */
 
     // DECLARAR UN ENCODER:
-    //RelativeEncoder neoteEncoder;
+    // RelativeEncoder nombreDelEncoder; ---> sólo indicamos que hacemos un nuevo objeto, más adelante le asignaremos un valor.
 
-    // DECLARAR UN ENCODER externo:
-    //RelativeEncoder boreEncoder;
+    // DECLARAR UN ENCODER externo (DIRECTO AL SPARK):
+    // RelativeEncoder boreEncoder; --> se recomienda dejarle el nombre de "boreEncoder"
 
-  DifferentialDrive chassis = new DifferentialDrive(izq, der);
+    // DECLARAR UN ENCODER EXTERNO:
+    // Encoder nombre = new Encoder(puerto1, puerto2);
 
-  Boolean isArcade = false; // tanque
-  Boolean neitoPositive = true; // para mostrar en la shuffle board
-  
-  RelativeEncoder neitoEncoder; 
-  double neitoSpeedPositive;
-  double neitoSpeedNegative;
-  double neitoSpeed;
-    
-  // NEO NEO
-  CANSparkMax neote = new CANSparkMax(6, MotorType.kBrushless);
-  double neoteSpeed;
-  double neoteSpeedPositive;
-  double neoteSpeedNegative;
-  boolean neotePositive;
+    /* 
 
-  
-  Encoder boreEncoder = new Encoder(8, 7); 
-  
-
-  //la navX
-  AHRS navX = new AHRS(SPI.Port.kMXP);
-  double angle;
+    // DECLARAR LA NAVX: la navX es una IMU (Inner Mass Unit)
+    AHRS navX = new AHRS(SPI.Port.kMXP);
+    double angle;
   
   // LIMIT SWITCHES:
   DigitalInput limitSwitch = new DigitalInput(6);
@@ -158,8 +144,17 @@ public class Robot extends TimedRobot {
 
   double CountsPerRev = 2048;
 
+  */
+ DifferentialDrive chasis = new DifferentialDrive(null, null);
+ CANSparkMax motor = new CANSparkMax(1, MotorType.kBrushless);
+ CANSparkMax motor1 = new CANSparkMax(2, MotorType.kBrushless);
+
+
+  
+ 
   @Override
   public void robotInit() {
+    /* 
       // reset neo
       neote.restoreFactoryDefaults();
       neito.restoreFactoryDefaults();
@@ -179,18 +174,20 @@ public class Robot extends TimedRobot {
     //boreEncoder.setPositionConversionFactor(((Math.PI * diametroLlanta) / relacionUsada) / 10);
 
     //boreEncoder.getPosition(); 
+    /* 
     boreEncoder.getDistance();
     neitoEncoder = neito.getEncoder(); // variable para obtener los datos del encoder.
-   
+   */
     //neoteEncoder = neote.getEncoder();
     
     //neoteEncoder.setPositionConversionFactor(0.5);
-
+    
 
   }
 
   @Override
   public void robotPeriodic() {
+    /* 
     System.out.println(isArcade);
     System.out.println("bonsoir");
     SmartDashboard.putNumber("NavX Yaw", navX.getYaw());
@@ -206,7 +203,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Neito Speed Negative", neitoSpeedNegative);
     SmartDashboard.putNumber("Neote Speed", neoteSpeed);
     SmartDashboard.putBoolean("Neote Positive", neotePositive);
-
+    */
   }
 
   @Override
@@ -222,6 +219,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
    //neoteEncoder.setPositionConversionFactor(2);
+   /* 
    boreEncoder.reset();
 
 
@@ -233,6 +231,8 @@ public class Robot extends TimedRobot {
     //neoteEncoder.setPosition(0);
     //boreEncoder.setPositionConversionFactor(((Math.PI * diametroLlanta) / relacionUsada) / 10);
     navX.reset();
+
+    */
   }
 
   @Override
@@ -240,7 +240,7 @@ public class Robot extends TimedRobot {
     
     // NEOS se pueden seguir entre ellos.
     //neito.follow(neote);
-
+    /* 
     if (control_chassis.getRawButton(1)) {
       isArcade = true; // arcade
     } else if (control_chassis.getRawButton(3)){
@@ -326,9 +326,12 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putNumber("SPEeD", neoteEncoder.getVelocity());
 
     //SmartDashboard.putNumber("Neote Bore Encoder", boreEncoder.getPosition());
+    /* 
     SmartDashboard.putNumber("Bore Encoder Distance:", boreEncoder.getDistance());
     SmartDashboard.putNumber("Bore Encoder Per Pulse:", boreEncoder.getDistancePerPulse());
     SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
+    */
+    
   }
 
   @Override
