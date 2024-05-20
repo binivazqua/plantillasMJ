@@ -268,6 +268,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    // Aquí ejecutaremos todas las acciones que queremos hacer en el teleoperado, como: movernos, anotar, detectar targets, etc...
     
     // NEOS se pueden seguir entre ellos.
     //  neito.follow(neote);
